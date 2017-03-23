@@ -1,0 +1,22 @@
+{
+    "name": "staskjs/simple-api",
+    "description": "Library for creating simple api wrappers for php",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Stas Karpov",
+            "email": "staskjs@mail.ru"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "^6.2"
+    },
+    "autoload": {
+        "classmap": [
+        ],
+        "psr-4": {
+            "Staskjs\\SimpleApi\\": "src/"
+        }
+    }
+
+}
