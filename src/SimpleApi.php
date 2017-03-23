@@ -4,9 +4,9 @@ use GuzzleHttp\Exception\RequestException;
 
 class SimpleApi {
 
-    private $url;
+    protected $url;
 
-    private $client;
+    protected $client;
 
     private $data;
 
