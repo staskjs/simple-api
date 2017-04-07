@@ -16,15 +16,21 @@ class SimpleApi {
 
     protected $headers = [];
 
-    public function __construct($api_url) {
+    public function __construct($api_url, $default_query = []) {
 
         if (empty($api_url)) {
             throw new \Exception('Api url is empty');
         }
 
+        $this->default_query = $default_query;
+
         $this->url = $api_url;
 
         $this->client = new \GuzzleHttp\Client();
+    }
+
+    public function setDefaultQuery($key, $value) {
+        $this->default_query[$key] = $value;
     }
 
     public function getData() {
