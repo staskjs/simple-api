@@ -38,7 +38,7 @@ class SimpleApi {
     }
 
     public function getErrors($key = null) {
-        return empty($key) ? $this->errors : $this->errors[$key];
+        return empty($key) ? $this->errors : @$this->errors[$key];
     }
 
     protected function request($method, $url, $params = []) {
