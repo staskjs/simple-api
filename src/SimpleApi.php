@@ -49,11 +49,7 @@ class SimpleApi {
         $body = $method == 'GET' ? [] : $params;
 
         try {
-            $response = $this->client->request($method, "{$this->url}/$url", [
-                'query' => $query,
-                'form_params' => $body,
-                'headers' => $this->headers,
-            ]);
+            $response = $this->makeRequest($method, "{$this->url}/$url", $query, $body);
         }
         catch(RequestException $e) {
             if ($e->getResponse()) {
@@ -64,7 +60,6 @@ class SimpleApi {
         }
 
         $data = $this->processResponse($response->getBody()->getContents());
-
         $this->data = $data;
 
         return true;
@@ -72,5 +67,13 @@ class SimpleApi {
 
     protected function processResponse($data) {
         return $data;
+    }
+
+    protected function makeRequest($method, $url, $query, $body) {
+        return $this->client->request($method, $url, [
+            'query' => $query,
+            'form_params' => $body,
+            'headers' => $this->headers,
+        ]);
     }
 }
