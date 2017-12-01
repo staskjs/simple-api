@@ -41,7 +41,7 @@ class SimpleApi {
         return empty($key) ? $this->errors : @$this->errors[$key];
     }
 
-    protected function request($method, $url, $params = []) {
+    protected function request($method, $url, $params = [], $files = []) {
         $this->data = [];
         $this->errors = [];
 
@@ -49,7 +49,7 @@ class SimpleApi {
         $body = $method == 'GET' ? [] : $params;
 
         try {
-            $response = $this->makeRequest($method, "{$this->url}/$url", $query, $body);
+            $response = $this->makeRequest($method, "{$this->url}/$url", $query, $body, $files);
         }
         catch(RequestException $e) {
             if ($e->getResponse()) {
@@ -69,11 +69,29 @@ class SimpleApi {
         return $data;
     }
 
-    protected function makeRequest($method, $url, $query, $body) {
-        return $this->client->request($method, $url, [
+    protected function makeRequest($method, $url, $query, $body, $files = []) {
+        $params = [
             'query' => $query,
-            'form_params' => $body,
             'headers' => $this->headers,
-        ]);
+        ];
+        if(!empty($files)) {
+            foreach($files as $formName => $filePath) {
+                $params['multipart'][] = [
+                    'name'     => $formName,
+                    'contents' => file_get_contents($filePath),
+                    'filename' => basename($filePath),
+                ];
+            }
+            foreach ($body as $paramName => $paramValue) {
+                $params['multipart'][] = [
+                    'name' => $paramName,
+                    'contents' => $paramValue,
+                ];
+            }
+        }
+        else {
+            $params['form_params'] = $body;
+        }
+        return $this->client->request($method, $url, $params);
     }
 }

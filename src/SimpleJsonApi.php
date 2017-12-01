@@ -8,7 +8,7 @@ class SimpleJsonApi extends SimpleApi {
         return json_decode($data, true);
     }
 
-    protected function makeRequest($method, $url, $query, $body) {
+    protected function makeRequest($method, $url, $query, $body, $files = []) {
         return $this->client->request($method, $url, [
             'query' => $query,
             'json' => $body,
